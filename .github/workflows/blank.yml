@@ -18,7 +18,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install libfuse2 libdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libgdk-pixbuf2.0-dev
-        sudo apt insatll libxss-dev libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
+        sudo apt install libxss-dev libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
         sudo apt install ninja-build autotools-dev autoconf automake build-essential meson
         wget https://raw.githubusercontent.com/Samueru-sama/dunst-AppImage/main/dunst-AppImage.sh
         chmod a+x ./dunst-AppImage.sh
