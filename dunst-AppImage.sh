@@ -23,7 +23,7 @@ make PREFIX="$CURRENTDIR"/usr \
 cat >> ./AppRun << 'EOF'
 #!/bin/bash
 CURRENTDIR="$(dirname "$(readlink -f "$0")")"
-export PATH="$PATH:$CURRENTDIR/bin"
+export PATH="$PATH:$CURRENTDIR/usr/bin"
 if [ "$1" = "notify" ]; then
 	"$CURRENTDIR/usr/bin/dunstify" "${@:2}"
 elif [ "$1" = "ctl" ]; then
