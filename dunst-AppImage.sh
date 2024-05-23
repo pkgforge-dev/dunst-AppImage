@@ -17,7 +17,7 @@ SYSTEMD=0 \
 COMPLETIONS=0 \
 make PREFIX="$CURRENTDIR"/usr \
 && make install PREFIX="$CURRENTDIR"/usr \
-&& cd .. && rm -rf ./dunst* ./download.tar.gz ./*.AppDir/usr/share || exit 1
+&& cd .. && rm -rf ./dunst* ./download.tar.gz ./usr/share || exit 1
 
 # AppRun
 cat >> ./AppRun << 'EOF'
