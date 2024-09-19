@@ -26,16 +26,41 @@ make PREFIX="$CURRENTDIR"/usr \
 
 # AppRun
 cat >> ./AppRun << 'EOF'
-#!/bin/bash
+#!/bin/sh
 CURRENTDIR="$(dirname "$(readlink -f "$0")")"
 export PATH="$PATH:$CURRENTDIR/usr/bin"
-if [ "$1" = "notify" ]; then
-	"$CURRENTDIR/usr/bin/dunstify" "${@:2}"
-elif [ "$1" = "ctl" ]; then
-	"$CURRENTDIR/usr/bin/dunstctl" "${@:2}"
-else
-	"$CURRENTDIR/usr/bin/dunst" "$@"
-fi
+
+BIN="$ARGV0"
+unset ARGV0
+case "$BIN" in
+	'dunst'|'dunstctl'|'dunstify')
+		exec "$CURRENTDIR/usr/bin/$BIN" "$@"
+		;;
+	'--help')
+		"$CURRENTDIR/usr/bin/$BIN" "$@"
+		echo "By default running the AppImage runs the dunst binary"
+		echo "AppImage commands:"
+		echo " \"--notify\"   runs dunstify"
+		echo " \"--ctl\"      runs dunstctl"
+		echo "You can also make symlinks to the AppImage with the names"
+		echo "dunstify and dunstctl and that will make it automatically"
+		echo "launch those binaries without needing to use extra flags"
+		echo "since it can read the name of the symlink that started it"
+		;;
+
+	*)
+		case "$1" in
+		'--notify')
+			shift
+			exec "$CURRENTDIR"/usr/bin/dunstify "$@"
+			;;
+		'--ctl')
+			shift
+			exec "$CURRENTDIR"/usr/bin/dunstctl "$@"
+			;;
+		esac
+	;;
+esac
 EOF
 chmod a+x ./AppRun
 APPVERSION=$(echo $version | awk -F / '{print $(NF)}')
