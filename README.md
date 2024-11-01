@@ -5,8 +5,10 @@ Unofficial AppImage of dunst https://github.com/dunst-project/dunst
 
 Works like the regular dunst, by default running the appimage does the same as running the regular `dunst` binary. 
 
-If you want to use `dunstify` or `dunstctl` you will have to symlink the appimage with the name of the symlink being `dunstify` or `dunstctl`, and by launching those symlinks the appimage knows that you want to launch `dunstify` or `dunstctl` since the appimage can know the name of the symlink it was launched with.
+Passing the flags `--ctl` or `--notify` make the appimage launch dunstctl or dunstify, you can also symlink the appimage with the names `dunstify` and `dunstctl` and that way by running those symlinks it automatically launches those commands without extra arguments. 
 
-It is possible that this appimage may fail to work with appimagelauncher, for that I recommend AM as an alternative again.
+**This AppImage bundles everything and should work on any linux distro, even on musl based ones.**
+
+It is possible that this appimage may fail to work with appimagelauncher, I recommend this alternative instead: https://github.com/ivan-hc/AM
 
 This appimage works without fuse2 as it can use fuse3 instead.
