@@ -96,7 +96,7 @@ chmod +x ./appimagetool
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
 	-n -u "$UPINFO" ./"$APPDIR" dunst-"$VERSION"-"$ARCH".AppImage
 
-mv ./*.AppImage ../ 
+mv ./*.AppImage* ../ 
 cd .. 
 rm -rf "$APP"
 echo "All Done!"
