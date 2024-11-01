@@ -29,6 +29,7 @@ jobs:
 
         chmod +x ./dunst-appimage.sh && ./dunst-appimage.sh
         mkdir dist
+        ls
         mv *.AppImage* dist/
 
     - name: Upload artifact
