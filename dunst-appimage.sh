@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -u
+set -eu
 export ARCH="$(uname -m)"
 export APPIMAGE_EXTRACT_AND_RUN=1
 UPINFO="gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|dunst-AppImage|latest|*$ARCH.AppImage.zsync"
@@ -13,59 +13,56 @@ LIB4BN="https://raw.githubusercontent.com/VHSgunzo/sharun/refs/heads/main/lib4bi
 SHARUN="https://bin.ajam.dev/$(uname -m)/sharun"
 
 # CREATE DIRECTORIES
-[ -n "$APP" ] && mkdir -p ./"$APP/$APPDIR" && cd ./"$APP/$APPDIR" || exit 1
+mkdir -p ./"$APP/$APPDIR"
+cd ./"$APP/$APPDIR"
 
-# DOWNLOAD AND BUILD ROFI
+# DOWNLOAD
 HERE="$(dirname "$(readlink -f "$0")")" # DO NOT MOVE THIS
 version=$(wget -q https://api.github.com/repos/"$SITE"/releases/latest -O - \
 	| sed 's/[()",{} ]/\n/g' | grep 'https.*.dunst.*tarball' | head -1)
+wget "$version" -O download.tar.gz
+tar fx ./*tar* && cd ./dunst*
 
 export VERSION="$(echo $version | awk -F"/" '{print $(NF)}')"
 
-wget "$version" -O download.tar.gz && tar fx ./*tar* && cd ./dunst* || exit 1
+# BUILD DUNST
+export COMPLETIONS=0
+make PREFIX="$HERE"/shared
+make install PREFIX="$HERE"/shared
 
-WAYLAND=0 SYSTEMD=0 COMPLETIONS=0 \
-	make PREFIX="$HERE"/usr && make install PREFIX="$HERE"/usr || exit 1
-
-cd .. && rm -rf ./dunst* ./download.tar.gz ./usr/share || exit 1
+cd ..
+rm -rf ./dunst* ./download.tar.gz
 
 # AppRun
 cat >> ./AppRun << 'EOF'
 #!/bin/sh
 CURRENTDIR="$(dirname "$(readlink -f "$0")")"
 export PATH="$CURRENTDIR/bin:$PATH"
+[ -z "$APPIMAGE" ] && APPIMAGE="$0"
 
 BIN="${ARGV0#./}"
 unset ARGV0
-case "$BIN" in
-	'dunst'|'dunstctl'|'dunstify')
-		exec "$CURRENTDIR/bin/$BIN" "$@"
-		;;
-	'--help')
-		"$CURRENTDIR/bin/$BIN" "$@"
-		echo "By default running the AppImage runs the dunst binary"
+if [ -f "$CURRENTDIR/bin/$BIN" ]; then
+	exec "$CURRENTDIR/bin/$BIN" "$@"
+elif [ "$1" = "--notify" ]; then
+	shift
+	exec "$CURRENTDIR"/bin/dunstify "$@"
+elif [ "$1" = "--ctl" ]; then
+	shift
+	exec "$CURRENTDIR"/bin/dunstctl "$@"
+else
+	if [ -z "$1" ]; then
 		echo "AppImage commands:"
-		echo " \"--notify\"   runs dunstify"
-		echo " \"--ctl\"      runs dunstctl"
+		echo " \"$APPIMAGE\"            runs dunst"
+		echo " \"$APPIMAGE --notify\"   runs dunstify"
+		echo " \"$APPIMAGE --ctl\"      runs dunstctl"
 		echo "You can also make symlinks to the AppImage with the names"
 		echo "dunstify and dunstctl and that will make it automatically"
 		echo "launch those binaries without needing to use extra flags"
-		echo "since it can read the name of the symlink that started it"
-		;;
-
-	*)
-		case "$1" in
-		'--notify')
-			shift
-			exec "$CURRENTDIR"/bin/dunstify "$@"
-			;;
-		'--ctl')
-			shift
-			exec "$CURRENTDIR"/bin/dunstctl "$@"
-			;;
-		esac
-	;;
-esac
+		echo "running dunst..."
+	fi
+	"$CURRENTDIR/bin/dunst" "$@"
+fi
 EOF
 chmod a+x ./AppRun
 
@@ -82,18 +79,24 @@ Hidden=true
 EOF
 
 # DEPLOY ALL LIBS
-mv ./usr ./shared
-mkdir -p ./bin && mv ./shared/bin/dunstctl ./bin || exit 1
+mkdir -p ./bin
+mv ./shared/bin/dunstctl ./bin
 
-wget "$LIB4BN" -O ./lib4bin && wget "$SHARUN" -O ./sharun || exit 1
+wget "$LIB4BN" -O ./lib4bin
+wget "$SHARUN" -O ./sharun
 chmod +x ./lib4bin ./sharun
-HARD_LINKS=1 ./lib4bin ./shared/bin/* && rm -f ./lib4bin || exit 1
+HARD_LINKS=1 ./lib4bin ./shared/bin/*
+rm -f ./lib4bin
 
 # Do the thing!
-cd .. && wget -q "$APPIMAGETOOL" -O appimagetool && chmod +x ./appimagetool
+cd ..
+wget -q "$APPIMAGETOOL" -O appimagetool
+chmod +x ./appimagetool
 ./appimagetool --comp zstd \
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
 	-n -u "$UPINFO" ./"$APPDIR" dunst-"$VERSION"-"$ARCH".AppImage
 
-mv ./*.AppImage .. && cd .. && rm -rf "$APP" || exit 1
+mv ./*.AppImage ../ 
+cd .. 
+rm -rf "$APP"
 echo "All Done!"
