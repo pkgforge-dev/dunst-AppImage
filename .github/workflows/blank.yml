@@ -5,7 +5,7 @@ concurrency:
 
 on:
   schedule:
-    - cron: "0 21 * * 0"
+    - cron: "0 16 1/10 * *"
   workflow_dispatch:
 
 jobs:
@@ -18,9 +18,14 @@ jobs:
     - name: build
       if: always()
       run: |
-        apk add coreutils bash wget git build-base build-base libxscrnsaver-dev \
-          libxinerama-dev libxrandr-dev libnotify-dev dbus-dev wayland-dev perl \
-          pango-dev wayland-protocols dbus librsvg desktop-file-utils
+        apk add coreutils bash wget git build-base build-base \
+          libxscrnsaver-dev libxinerama-dev libxrandr-dev \
+          libnotify-dev dbus-dev wayland-dev perl pango-dev \
+          wayland-protocols dbus librsvg desktop-file-utils
+
+        # alpine repos don't have zsyncmake
+        wget https://github.com/probonopd/static-tools/releases/download/continuous/zsyncmake-x86_64 
+          \ -O /usr/bin/zsyncmake && chmod +x /usr/bin/zsyncmake
 
         chmod +x ./dunst-appimage.sh && ./dunst-appimage.sh
         mkdir dist
