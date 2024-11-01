@@ -1,8 +1,6 @@
 # dunst-AppImage
 Unofficial AppImage of dunst https://github.com/dunst-project/dunst
 
-# READ THIS
-
 Works like the regular dunst, by default running the appimage does the same as running the regular `dunst` binary. 
 
 Passing the flags `--ctl` or `--notify` make the appimage launch dunstctl or dunstify, you can also symlink the appimage with the names `dunstify` and `dunstctl` and that way by running those symlinks it automatically launches those commands without extra arguments. 
