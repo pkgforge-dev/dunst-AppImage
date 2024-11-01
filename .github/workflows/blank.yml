@@ -20,7 +20,8 @@ jobs:
         sudo apt install libfuse2 libdbus-1-dev libx11-dev libxinerama-dev \
         libxrandr-dev libgdk-pixbuf2.0-dev libxss-dev libglib2.0-dev \
         libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev \
-        ninja-build autotools-dev autoconf automake build-essential meson
+        ninja-build autotools-dev autoconf automake build-essential meson \
+        desktop-file-utils zsync
 
         chmod +x ./dunst-appimage.sh && ./dunst-appimage.sh
 
