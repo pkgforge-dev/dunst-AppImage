@@ -1,46 +1,52 @@
-name: dunst AppImage
+name: Your Appimage
 concurrency:
   group: build-${{ github.ref }}
   cancel-in-progress: true
 
 on:
   schedule:
-    - cron: "0 16 1/7 * *"
+    - cron: "0 16 1/10 * *"
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
+    container: alpine:latest
     steps:
     - uses: actions/checkout@v3
 
     - name: build
+      if: always()
       run: |
-        sudo apt update
-        sudo apt install libfuse2 libdbus-1-dev libx11-dev libxinerama-dev libxrandr-dev libgdk-pixbuf2.0-dev
-        sudo apt install libxss-dev libglib2.0-dev libpango1.0-dev libgtk-3-dev libxdg-basedir-dev libnotify-dev
-        sudo apt install ninja-build autotools-dev autoconf automake build-essential meson
-        wget https://raw.githubusercontent.com/Samueru-sama/dunst-AppImage/main/dunst-AppImage.sh
-        chmod a+x ./dunst-AppImage.sh
-        ./dunst-AppImage.sh
+        apk add coreutils bash wget git build-base build-base \
+          libxscrnsaver-dev libxinerama-dev libxrandr-dev \
+          libnotify-dev dbus-dev wayland-dev perl pango-dev \
+          wayland-protocols dbus librsvg desktop-file-utils
+
+        # alpine repos don't have zsyncmake
+        wget https://github.com/probonopd/static-tools/releases/download/continuous/zsyncmake-x86_64 \
+          -O /usr/bin/zsyncmake && chmod +x /usr/bin/zsyncmake
+
+        chmod +x ./dunst-appimage.sh && ./dunst-appimage.sh
         mkdir dist
-        mv *AppImage dist/
+        ls
+        mv *.AppImage* dist/
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4.4.0
       with:
-        name: dunst-x86_64.AppImage
+        name: AppImage
         path: 'dist'
-        
+
   release:
       needs: [build]
       permissions: write-all
       runs-on: ubuntu-latest
 
       steps:
-        - uses: actions/download-artifact@v4
+        - uses: actions/download-artifact@v4.1.8
           with:
-            name: dunst-x86_64.AppImage
+            name: AppImage
 
         - name: release
           uses: marvinpinto/action-automatic-releases@latest
@@ -50,5 +56,5 @@ jobs:
             prerelease: false
             draft: false
             files: |
-              *.AppImage
+              *.AppImage*
             repo_token: ${{ secrets.GITHUB_TOKEN }}
