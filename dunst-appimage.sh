@@ -95,6 +95,7 @@ chmod +x ./appimagetool
 ./appimagetool --comp zstd \
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
 	-n -u "$UPINFO" ./"$APPDIR" dunst-"$VERSION"-"$ARCH".AppImage
+ls
 
 mv ./*.AppImage* ../ 
 cd .. 
