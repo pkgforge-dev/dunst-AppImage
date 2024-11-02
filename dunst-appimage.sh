@@ -83,6 +83,7 @@ else
 fi
 find ./usr/bin -type f -exec patchelf --set-rpath '$ORIGIN/../lib' {} ';'
 find ./usr/lib -type f -exec patchelf --set-rpath '$ORIGIN' {} ';'
+find ./usr/lib ./usr/bin -type f -exec strip -s -R .comment --strip-unneeded {} ';'
 
 # Do the thing!
 export VERSION="$(./AppRun --version | awk '{print $(NF-1)}')"
