@@ -18,7 +18,7 @@ jobs:
     - name: build
       if: always()
       run: |
-        apk add coreutils bash wget git build-base build-base \
+        apk add coreutils bash wget git build-base patchelf \
           libxscrnsaver-dev libxinerama-dev libxrandr-dev \
           libnotify-dev dbus-dev wayland-dev perl pango-dev \
           wayland-protocols dbus librsvg desktop-file-utils
