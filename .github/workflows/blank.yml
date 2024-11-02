@@ -52,9 +52,9 @@ jobs:
           uses: marvinpinto/action-automatic-releases@latest
           with:
             title: Continuous build
-            automatic_release_tag: continuous
+            automatic_release_tag: test
             prerelease: false
-            draft: false
+            draft: true
             files: |
               *.AppImage*
             repo_token: ${{ secrets.GITHUB_TOKEN }}
