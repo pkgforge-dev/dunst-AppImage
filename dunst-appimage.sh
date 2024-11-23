@@ -3,7 +3,7 @@
 set -eu
 export ARCH="$(uname -m)"
 export APPIMAGE_EXTRACT_AND_RUN=1
-UPINFO="gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|dunst-AppImage|latest|*$ARCH.AppImage.zsync"
+UPINFO="gh-releases-zsync|$(echo $GITHUB_REPOSITORY | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 APP=dunst
 SITE="dunst-project/dunst"
 APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
@@ -92,7 +92,7 @@ chmod +x ./appimagetool
 ls
 ./appimagetool --comp zstd \
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
-	-n -u "$UPINFO" ./AppDir ./dunst-"$VERSION"-"$ARCH".AppImage
+	-n -u "$UPINFO" ./AppDir ./dunst-"$VERSION"-anylinux-"$ARCH".AppImage
 
 mv ./*.AppImage* ../
 cd ..
