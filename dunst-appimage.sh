@@ -85,7 +85,7 @@ find ./usr/lib -type f -exec patchelf --set-rpath '$ORIGIN' {} ';'
 find ./usr/lib ./usr/bin -type f -exec strip -s -R .comment --strip-unneeded {} ';'
 
 # Do the thing!
-export VERSION="$(./AppRun --version | awk '{print $(NF-1)}')"
+export VERSION="$(./AppRun --version | awk 'FNR==1 {print $NF}')"
 cd ..
 wget -q "$APPIMAGETOOL" -O appimagetool
 chmod +x ./appimagetool
