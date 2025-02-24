@@ -87,6 +87,8 @@ find ./usr/lib ./usr/bin -type f -exec strip -s -R .comment --strip-unneeded {} 
 
 # Do the thing!
 export VERSION="$(./AppRun --version | awk 'FNR==1 {print $NF}')"
+[ -n "$VERSION" ]
+echo "$VERSION" > ~/version
 cd ..
 wget -q "$APPIMAGETOOL" -O appimagetool
 chmod +x ./appimagetool
