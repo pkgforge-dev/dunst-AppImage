@@ -74,7 +74,8 @@ EOF
 
 # DEPLOY ALL LIBS
 mkdir -p ./usr/lib
-ldd ./usr/bin/* | awk -F"[> ]" '{print $4}' | xargs -I {} cp -vf {} ./usr/lib
+ldd ./usr/bin/* /usr/lib/libnotify.so | awk -F"[> ]" '{print $4}' | xargs -I {} cp -vf {} ./usr/lib
+cp -vn /usr/lib/libnotify.so* ./usr/lib
 if [ -f ./usr/lib/ld-musl-x86_64.so.1 ]; then
 	mv ./usr/lib/ld-musl-x86_64.so.1 ./
 else
