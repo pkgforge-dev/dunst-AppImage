@@ -6,7 +6,7 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 UPINFO="gh-releases-zsync|$(echo $GITHUB_REPOSITORY | tr '/' '|')|latest|*$ARCH.AppImage.zsync"
 APP=dunst
 SITE="dunst-project/dunst"
-APPIMAGETOOL="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage"
+APPIMAGETOOL="https://github.com/pkgforge-dev/appimagetool-uruntime/releases/download/continuous/appimagetool-$ARCH.AppImage"
 export COMPLETIONS=0
 
 # CREATE DIRECTORIES
