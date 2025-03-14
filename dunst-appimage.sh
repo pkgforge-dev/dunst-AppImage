@@ -93,7 +93,7 @@ cd ..
 wget -q "$APPIMAGETOOL" -O appimagetool
 chmod +x ./appimagetool
 ls
-./appimagetool --comp zstd \
+URUNTIME_PRELOAD=1 ./appimagetool --comp zstd \
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
 	-n -u "$UPINFO" ./AppDir ./dunst-"$VERSION"-anylinux-"$ARCH".AppImage
 
