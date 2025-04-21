@@ -10,23 +10,23 @@ export COMPLETIONS=0
 echo "Installing dependencies..."
 echo "---------------------------------------------------------------"
 apk add \
-	bash
-	build-base
-	coreutils
-	dbus
-	dbus-dev
-	desktop-file-utils
-	git
-	libnotify-dev
-	librsvg
-	libxinerama-dev
-	libxrandr-dev
-	libxscrnsaver-dev
-	pango-dev
-	patchelf
-	perl
-	wayland-dev
-	wayland-protocols
+	bash \
+	build-base \
+	coreutils \
+	dbus \
+	dbus-dev \
+	desktop-file-utils \
+	git \
+	libnotify-dev \
+	librsvg \
+	libxinerama-dev \
+	libxrandr-dev \
+	libxscrnsaver-dev \
+	pango-dev \
+	patchelf \
+	perl \
+	wayland-dev \
+	wayland-protocols \
 	wget
 
 echo "Building dunst..."
