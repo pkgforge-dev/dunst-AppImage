@@ -5,28 +5,22 @@ concurrency:
 
 on:
   schedule:
-    - cron: "0 16 1/10 * *"
+    - cron: "0 16 1/14 * *"
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     container: alpine:latest
     steps:
     - uses: actions/checkout@v4
 
-    - name: build
+    - name: Get dependencies
       if: always()
+      run: chmod +x ./get-dependencies.sh && ./get-dependencies.sh
+
+    - name: Make AppImage
       run: |
-        apk add coreutils bash wget git build-base patchelf \
-          libxscrnsaver-dev libxinerama-dev libxrandr-dev \
-          libnotify-dev dbus-dev wayland-dev perl pango-dev \
-          wayland-protocols dbus librsvg desktop-file-utils
-
-        # alpine repos don't have zsyncmake
-        wget https://github.com/probonopd/static-tools/releases/download/continuous/zsyncmake-x86_64 \
-          -O /usr/bin/zsyncmake && chmod +x /usr/bin/zsyncmake
-
         chmod +x ./dunst-appimage.sh && ./dunst-appimage.sh
         mkdir dist
         ls
