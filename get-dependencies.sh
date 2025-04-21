@@ -32,11 +32,11 @@ apk add \
 echo "Building dunst..."
 wget "$TARBALL" -O download.tar.gz
 tar fx ./*.tar.* && (
-	cd ./dunst*
+	cd ./dunst-project*
 	make -j$(nproc)
 	make install
 )
-rm -rf ./dunst* ./download.tar.gz
+rm -rf ./dunst-project* ./download.tar.gz
 
 echo "All done!"
 echo "---------------------------------------------------------------"
