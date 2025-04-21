@@ -61,7 +61,7 @@ mkdir -p ./usr/lib ./usr/bin ./etc/xdg
 cp -vr /usr/local/etc/xdg/dunst   ./etc/xdg
 cp -v /usr/local/bin/dunst*       ./usr/bin
 cp -v /usr/lib/libnotify.so*      ./usr/lib
-cp -v /lib64/ld-musl-"$ARCH".so.1 ./ld-musl.so
+cp -v /lib64/ld-musl-*.so.2       ./ld-musl.so
 
 ldd ./usr/bin/* ./usr/lib/* \
 	| awk -F"[> ]" '{print $4}' | xargs -I {} cp -vf {} ./usr/lib
