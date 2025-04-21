@@ -23,11 +23,11 @@ if [ -f "$CURRENTDIR/usr/bin/$BIN" ]; then
 	if [ "$BIN" = "dunstctl" ]; then
 		exec "$CURRENTDIR/usr/bin/$BIN" "$@"
 	else
-		exec "$CURRENTDIR/ld-musl.so.1" "$CURRENTDIR/usr/bin/$BIN" "$@"
+		exec "$CURRENTDIR/ld-musl.so" "$CURRENTDIR/usr/bin/$BIN" "$@"
 	fi
 elif [ "$1" = "--notify" ]; then
 	shift
-	exec "$CURRENTDIR/ld-musl.so.1" "$CURRENTDIR"/usr/bin/dunstify "$@"
+	exec "$CURRENTDIR/ld-musl.so" "$CURRENTDIR"/usr/bin/dunstify "$@"
 elif [ "$1" = "--ctl" ]; then
 	shift
 	exec "$CURRENTDIR"/usr/bin/dunstctl "$@"
@@ -41,7 +41,7 @@ else
 		echo "dunstify and dunstctl to launch them automatically without extra args"
 		echo "running dunst..."
 	fi
-	exec "$CURRENTDIR/ld-musl.so.1" "$CURRENTDIR/usr/bin/dunst" "$@"
+	exec "$CURRENTDIR/ld-musl.so" "$CURRENTDIR/usr/bin/dunst" "$@"
 fi' > ./AppRun
 chmod +x ./AppRun
 
@@ -61,7 +61,7 @@ mkdir -p ./usr/lib ./usr/bin ./etc/xdg
 cp -vr /usr/local/etc/xdg/dunst   ./etc/xdg
 cp -v /usr/local/bin/dunst*       ./usr/bin
 cp -v /usr/lib/libnotify.so*      ./usr/lib
-cp -v /lib64/ld-musl-"$ARCH".so.1 ./ld-musl.so.1
+cp -v /lib64/ld-musl-"$ARCH".so.2 ./ld-musl.so
 
 ldd ./usr/bin/* ./usr/lib/* \
 	| awk -F"[> ]" '{print $4}' | xargs -I {} cp -vf {} ./usr/lib
