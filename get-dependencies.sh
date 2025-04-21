@@ -2,7 +2,7 @@
 
 set -ex
 
-TARBALL=$(wget https://api.github.com/repos/"$SITE"/releases/latest -O - \
+TARBALL=$(wget https://api.github.com/repos/dunst-project/dunst/releases/latest -O - \
 	| sed 's/[()",{} ]/\n/g' | grep 'https.*.dunst.*tarball' | head -1)
 
 export COMPLETIONS=0
