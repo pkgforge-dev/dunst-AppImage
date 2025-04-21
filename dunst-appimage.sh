@@ -12,9 +12,6 @@ APPIMAGETOOL="https://github.com/pkgforge-dev/appimagetool-uruntime/releases/dow
 mkdir ./AppDir
 cd ./AppDir
 
-mkdir ./etc/dunst
-cp -v /etc/xdg/dunst ./etc/dunst
-
 # AppRun
 echo '#!/bin/sh
 CURRENTDIR="$(dirname "$(readlink -f "$0")")"
@@ -59,9 +56,10 @@ Categories=System
 Hidden=true' > dunst.desktop
 
 # DEPLOY ALL LIBS
-mkdir -p ./usr/lib ./usr/bin
+mkdir -p ./usr/lib ./usr/bin ./etc/xdg
 
-cp -v /usr/bin/dunst*             ./usr/bin
+cp -vr /usr/local/etc/xdg/dunst   ./etc/xdg
+cp -v /usr/local/bin/dunst*       ./usr/bin
 cp -v /usr/lib/libnotify.so*      ./usr/lib
 cp -v /lib64/ld-musl-"$ARCH".so.1 ./ld-musl.so.1
 
