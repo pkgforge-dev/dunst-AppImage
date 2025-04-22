@@ -19,6 +19,10 @@ export PATH="$CURRENTDIR/usr/bin:$PATH"
 [ -n "$APPIMAGE" ] || APPIMAGE="$0"
 BIN="${ARGV0#./}"
 unset ARGV0
+
+# Change the current working dir since we have relative path to sysconfig file
+cd "$CURRENTDIR"
+
 if [ -f "$CURRENTDIR/usr/bin/$BIN" ]; then
 	if [ "$BIN" = "dunstctl" ]; then
 		exec "$CURRENTDIR/usr/bin/$BIN" "$@"
@@ -56,9 +60,9 @@ Categories=System
 Hidden=true' > dunst.desktop
 
 # DEPLOY ALL LIBS
-mkdir -p ./usr/lib ./usr/bin ./etc/xdg
+mkdir -p ./usr/lib ./usr/bin ./local/etc/xdg
 
-cp -vr /usr/local/etc/xdg/dunst   ./etc/xdg
+cp -vr /usr/local/etc/xdg/dunst   ./local/etc/xdg
 cp -v /usr/local/bin/dunst*       ./usr/bin
 cp -v /usr/lib/libnotify.so*      ./usr/lib
 cp -v /lib/ld-musl-*.so.1         ./ld-musl.so
@@ -68,6 +72,9 @@ ldd ./usr/bin/* ./usr/lib/* \
 
 find ./usr -type f -exec patchelf --set-rpath '$ORIGIN:$ORIGIN/../lib' {} ';'
 find ./usr -type f -exec strip -s -R .comment --strip-unneeded {} ';'
+
+# Fix hardcoded path to sysconfig file
+sed -i 's|/usr/local/etc|././/local/etc|g' ./usr/bin/*
 
 export VERSION="$(./AppRun --version | awk 'FNR==1 {print $NF}')"
 [ -n "$VERSION" ]
