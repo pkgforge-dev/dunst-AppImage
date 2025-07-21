@@ -1,5 +1,11 @@
-# dunst-AppImage
-Unofficial AppImage of dunst https://github.com/dunst-project/dunst
+# dunst-AppImage 🐧
+
+[![GitHub Downloads](https://img.shields.io/github/downloads/pkgforge-dev/dunst-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pkgforge-dev/dunst-AppImage/releases/latest)
+[![CI Build Status](https://github.com//pkgforge-dev/dunst-AppImage/actions/workflows/blank.yml/badge.svg)](https://github.com/pkgforge-dev/dunst-AppImage/releases/latest)
+
+* [Latest Stable Release](https://github.com/pkgforge-dev/dunst-AppImage/releases/latest)
+
+---
 
 Works like the regular dunst, by default running the appimage does the same as running the regular `dunst` binary. 
 
