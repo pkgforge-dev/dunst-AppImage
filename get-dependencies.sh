@@ -1,42 +1,18 @@
 #!/bin/sh
 
-set -ex
+set -eu
 
-TARBALL=$(wget https://api.github.com/repos/dunst-project/dunst/releases/latest -O - \
-	| sed 's/[()",{} ]/\n/g' | grep 'https.*.dunst.*tarball' | head -1)
+ARCH=$(uname -m)
 
-export COMPLETIONS=0
-
-echo "Installing dependencies..."
+echo "Installing package dependencies..."
 echo "---------------------------------------------------------------"
-apk add \
-	bash \
-	build-base \
-	coreutils \
-	dbus \
-	dbus-dev \
-	desktop-file-utils \
-	git \
-	libnotify-dev \
-	librsvg \
-	libxinerama-dev \
-	libxrandr-dev \
-	libxscrnsaver-dev \
-	pango-dev \
-	patchelf \
-	perl \
-	wayland-dev \
-	wayland-protocols \
-	wget
+pacman -Syu --noconfirm dunst
 
-echo "Building dunst..."
-wget "$TARBALL" -O download.tar.gz
-tar fx ./*.tar.* && (
-	cd ./dunst-project*
-	make -j$(nproc)
-	make install
-)
-rm -rf ./dunst-project* ./download.tar.gz
-
-echo "All done!"
+echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
+get-debloated-pkgs --add-common --prefer-nano
+
+# Comment this out if you need an AUR package
+#make-aur-package PACKAGENAME
+
+# If the application needs to be manually built that has to be done down here
