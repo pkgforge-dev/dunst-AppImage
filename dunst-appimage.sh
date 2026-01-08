@@ -76,7 +76,7 @@ find ./usr -type f -exec strip -s -R .comment --strip-unneeded {} ';'
 # Fix hardcoded path to sysconfig file
 sed -i 's|/usr/local/etc|././/local/etc|g' ./usr/bin/*
 
-export VERSION="$(./AppRun --version | awk 'FNR==1 {print $NF}')"
+export VERSION="$(./AppRun --version | awk '{print $(NF-1); exit}')"
 [ -n "$VERSION" ]
 echo "$VERSION" > ~/version
 
