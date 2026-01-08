@@ -14,7 +14,10 @@ export DESKTOP=DUMMY
 export PATH_MAPPING='/etc/dunst:${SHARUN_DIR}/etc/dunst'
 
 # Deploy dependencies
-quick-sharun /usr/bin/dunst* /etc/dunst
+quick-sharun \
+	/usr/bin/dunst*
+	/usr/lib/libnotify.so*
+	/etc/dunst
 
 # Additional changes can be done in between here
 
